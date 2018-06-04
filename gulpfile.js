@@ -18,7 +18,7 @@ const gulp = require('gulp'),
     dist: 'dist'
   }
 
-  gulp.task('scripts', function() {
+  gulp.task('concatScripts', function() {
   return gulp.src([
    'src/js/global.js',
    'src/js/circle/autogrow.js',
@@ -29,13 +29,26 @@ const gulp = require('gulp'),
   .pipe(gulp.dest(options.dist + '/js'));
 });
 
-  gulp.task('styles', function() {
+gulp.task('scripts',['concatScripts'], function(){
+  return gulp.src(options.dist + '/js/all.min.js')
+  .pipe(uglify())
+  // .pipe(rename('all.min.js'))
+  .pipe(gulp.dest(options.dist + '/js'));
+});
+
+  gulp.task('concatStyles', function() {
     return gulp.src(options.src + "/sass/global.scss")
         .pipe(maps.init())
         .pipe(concat('all.min.css'))
         .pipe(sass())
         .pipe(maps.write('./'))
         .pipe(gulp.dest(options.dist + '/styles'));
+  });
+
+  gulp.task('styles',['concatStyles'], function(){
+    return gulp.src(options.dist + '/styles/all.min.css')
+    .pipe(csso())
+    .pipe(gulp.dest(options.dist + '/styles'))
   });
 
   gulp.task('images', function (){
