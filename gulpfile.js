@@ -76,7 +76,7 @@ gulp.task('scripts',['concatScripts'], function(){
   });
 
   gulp.task('watch', function() {
-    gulp.watch(options.src + '/sass/**/*.scss', ['styles']);
+    gulp.watch(options.src + '/sass/**', ['styles']);
   });
 
   gulp.task('serve', function(){
@@ -86,7 +86,7 @@ gulp.task('scripts',['concatScripts'], function(){
     });
   });
 
-  gulp.task("build", gulpSequence(['clean'],['styles', 'scripts', 'images'], 'files'))
+  gulp.task("build", gulpSequence(['clean'],['styles', 'scripts', 'images'], 'files', ['watch']))
 
   gulp.task('default', ['build'], function(){
     gulp.start('serve');
