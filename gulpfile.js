@@ -11,7 +11,9 @@ const gulp = require('gulp'),
   useref = require('gulp-useref'),
   iff = require('gulp-if'),
   csso = require('gulp-csso'),
-  image = require('gulp-image');
+  image = require('gulp-image'),
+  connect = require('gulp-connect'),
+  gulpSequence = require('gulp-sequence');
 
   var options = {
     src: 'src',
@@ -68,16 +70,24 @@ gulp.task('scripts',['concatScripts'], function(){
 
 
 
-  gulp.task("build", ['clean'], function() {
-    gulp.start ('scripts', 'styles', 'images');
+  gulp.task("files", function() {
     gulp.src([options.src + "/icons/**", options.src + "/index.html"], { base: options.src})
       .pipe(gulp.dest(options.dist));
   });
 
   gulp.task('watch', function() {
     gulp.watch(options.src + '/sass/**/*.scss', ['styles']);
-  })
+  });
 
-  gulp.task("default", ["clean"], function() {
-    gulp.start('build');
+  gulp.task('serve', function(){
+    connect.server({
+      root: ['dist'],
+      port: 3000
+    });
+  });
+
+  gulp.task("build", gulpSequence(['clean'],['styles', 'scripts', 'images'], 'files'))
+
+  gulp.task('default', ['build'], function(){
+    gulp.start('serve');
   });

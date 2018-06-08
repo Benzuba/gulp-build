@@ -21,6 +21,8 @@
     "gulp-useref": "^3.1.5"
   },
   "devDependencies": {
+    "gulp-connect": "^5.5.0",
+    "gulp-sequence": "^1.0.0",
     "gulp-uglify": "^3.0.0"
   }
 }
